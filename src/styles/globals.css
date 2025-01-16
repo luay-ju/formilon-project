@@ -1,0 +1,156 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* HTW Berlin Primary Colors */
+  --htw-green: 78 100% 36%; /* #76B900 */
+  --htw-blue: 203 100% 41%; /* #0082D1 */
+  --htw-orange: 24 100% 50%; /* #FF5F00 */
+  --htw-gray: 0 0% 69%; /* #AFAFAF */
+
+  /* Main theme variables mapped to HTW colors */
+  --background: 0 0% 100%;
+  --foreground: 0 0% 3.9%;
+  --card: 0 0% 100%;
+  --card-foreground: 0 0% 3.9%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 0 0% 3.9%;
+
+  /* Map primary to HTW Green */
+  --primary: 78 100% 36%;
+  --primary-foreground: 0 0% 100%;
+
+  /* Map secondary to HTW Blue */
+  --secondary: 203 100% 41%;
+  --secondary-foreground: 0 0% 100%;
+
+  /* Use HTW Orange for accent */
+  --accent: 24 100% 50%;
+  --accent-foreground: 0 0% 100%;
+
+  /* Use HTW Gray for muted */
+  --muted: 0 0% 69%;
+  --muted-foreground: 0 0% 20%;
+
+  --destructive: 0 84.2% 60.2%;
+  --destructive-foreground: 0 0% 98%;
+
+  /* Border and input using HTW Gray */
+  --border: 0 0% 69%;
+  --input: 0 0% 69%;
+  --ring: 78 100% 36%;
+
+  /* Chart colors using HTW palette */
+  --chart-1: 78 100% 36%; /* HTW Green */
+  --chart-2: 203 100% 41%; /* HTW Blue */
+  --chart-3: 24 100% 50%; /* HTW Orange */
+  --chart-4: 0 0% 69%; /* HTW Gray */
+  --chart-5: 78 80% 46%; /* Lighter HTW Green */
+
+  --radius: 0.5rem;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-family: "Verdana", sans-serif; /* HTW's secondary font for broader compatibility */
+  }
+}
+
+/* Keep your existing animations */
+@keyframes successPulse {
+  0% {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes successCheck {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes dialogEntry {
+  0% {
+    transform: scale(0.95) translateY(10px);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+  }
+}
+
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* HTW Berlin specific utility classes */
+@layer utilities {
+  .text-htw-green {
+    color: hsl(78, 100%, 36%);
+  }
+  .bg-htw-green {
+    background-color: hsl(78, 100%, 36%);
+  }
+  .text-htw-blue {
+    color: hsl(203, 100%, 41%);
+  }
+  .bg-htw-blue {
+    background-color: hsl(203, 100%, 41%);
+  }
+  .text-htw-orange {
+    color: hsl(24, 100%, 50%);
+  }
+  .bg-htw-orange {
+    background-color: hsl(24, 100%, 50%);
+  }
+  .text-htw-gray {
+    color: hsl(0, 0%, 69%);
+  }
+  .bg-htw-gray {
+    background-color: hsl(0, 0%, 69%);
+  }
+
+  /* Custom Scrollbar */
+  .scrollbar-thin {
+    scrollbar-width: thin;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-track {
+    background: hsl(var(--muted) / 0.1);
+    border-radius: 3px;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    background: hsl(var(--muted));
+    border-radius: 3px;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-thumb:hover {
+    background: hsl(var(--muted-foreground) / 0.5);
+  }
+}

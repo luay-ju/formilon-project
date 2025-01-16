@@ -1,0 +1,55 @@
+version: "3.8"
+
+services:
+  db:
+    image: postgres:latest
+    container_name: formilon-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: formilon
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: formilon-app
+    ports:
+      - "3000:3000"
+    environment:
+      DATABASE_URL: "postgresql://postgres:postgres@db:5432/formilon?schema=public"
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: formilon
+
+      # Next.js specific
+      NEXT_PUBLIC_API_URL: "http://localhost:3000"
+      NEXT_PUBLIC_URL: "http://localhost:3000"
+      PUBLIC_URL: "http://localhost:3000"
+      NEXTAUTH_URL: "http://localhost:3000"
+      NEXTAUTH_SECRET: "03861e45e078a434084006a731030d348716a08c8745c2807fb02bee6e62a7a9"
+
+      # Google Cloud
+      GOOGLE_CLOUD_PROJECT_ID: "formilon"
+      GOOGLE_CLOUD_PRIVATE_KEY: "-----BEGIN PRIVATE KEY-----\nMIIEvwIBADANBgkqhkiG9w0BAQEFAASCBKkwggSlAgEAAoIBAQCmzUkYPoNy/6WN\n5Os6RWhko6BWOpUdAQvQVyyM0rTv8EiJV88s5ztP4pF9mgUpqMErXIwhHrWMj83A\nS1vLtrNKOTzgb3HYJiWB5jr6hhLRyOLbLKVYFgds+qkea9rd8SO9B+azRb33lZW+\nQ3GdZ86IfoznNiSnWg0s5bkuBuSkFvi8C0nR22YKE5rV8E32zKsIkl3b7W2zat8N\nG0xX9QRPEH7r7Ks4UTaJCspqLwyOOE0mErWJc9zds0osRZqtnM8tBKgef3pHrymF\n6S4u2Ke0CV2Ficsy1KbIP+aeGONgrlyTZr2S34/XtKSRudvkN72wTfbQeWZwjelW\nH+eXLSUjAgMBAAECggEAE0OoSn2FzvVJmI60wCEeAmmHbg4MBLKHO8OlqIn5TbDR\nn9MdYVE/X2WKahgsunf7/1cL9BNI4ngFSk0px+hM4qijqEQWwOD++fauHxr293Wd\nBbUtT3QT3XlBqPrJ51IfT4inE1Ndskd7aOL/Ly+7Abaj7VwqdY2H8gSCE5fGNlEl\nBfjyZY201WaeORqbQyLKGVmmw9NM4Xj/mHwUQUG1EFI5NgVjks6ZFGJ6JgGAxPfd\nIL9wOrED+ClUaI3l0OKUuGf0tGAe3AnsiJE5uLq+D/niM2PzoJoFpdB/X4ZRopfr\ny+9g+AHfUGjZNX/KvKfQcK9MB8k618fb7RuZW7hCUQKBgQDdj1UqdNoVNWQS+D5h\nA/sRQNgYwDG3L3VzpUrDqBIYITWiatf/8rK30D4lBXJ8VdmRRy55fIuz+S6FaH3U\nO0YD4Kw3m5K117odvupCKl3EJ/iqpNEW53hB6c+43xyr1dPFafCBCVpbSXwoqYht\nQ76hSkN/CCzB7gZ6tSHJZSeESwKBgQDAuu9E/Y40r+fbe9puoaTP7LzNfzxh5mtJ\nmdCTmaqhs6VNh5aPVAWFa1PqrcU6vFKfTdfJ7hYrWw4ijryimjxbyXbxf3sd7OdU\nI+Eut2I0qYayxF+VDswZp2eU3nvsj8XpdMckcVfFcLA6Nmx6R8XQ/fqdbHag4/sU\nfnFERLRriQKBgQCRIf0V7KmWzvyY+IhUILlsGd/0hqGKb8ouUQ5ikEwaBlcN55NK\nk/7CLeUndyQBknMMmWY2KoGRCR+SQFp8lb9NdvUZEA3QlFnUdmUZpor5nX1kusZE\njKfX9YMehPhRD6bDYJwsyqWnusFcGYHGoWPUX8NLCV3YQ0V3SAOz21FBdQKBgQCo\nND3Qu24aA4/aWXyo40CBCz84Jhyf4MawBKMpvopR+ASD5pr7Wjw7VhF2FtS0T1nY\nmMqE/NqyWhS7ClINo4icHvdFC5p64qB+KZZE/F2kUnQxnvtAjxqIJTdckNQdANmc\nx4NqBdWxhoj3NTp1eiBmJtNMAzaBcpdWKohWKZRA6QKBgQCD5mQ0M0jILfOa4vuh\nLqRjt2ac+jwz8bng3spLq/OQO8wcNy+L8SiuzL7cbcEe6vqc9ZftB9VK8l7Tas+P\n/IvvLg7u6WSB1KpmzHQLDZT32h9csh/peoRbhFwlAXRER1MNhO7dPm1pWoa5EQ8P\nwHIkrw+q/czabjjF8vz3jNzMug==\n-----END PRIVATE KEY-----\n"
+      GOOGLE_CLOUD_CLIENT_EMAIL: "formilon@formilon.iam.gserviceaccount.com"
+
+      # Node
+      NODE_ENV: production
+      PORT: 3000
+      HOSTNAME: "0.0.0.0"
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  postgres_data:

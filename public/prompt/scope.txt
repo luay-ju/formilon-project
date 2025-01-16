@@ -1,0 +1,154 @@
+# Form Builder Project Documentation
+
+## Technology Stack Requirements
+
+All contributors and LLM agents MUST adhere to this technology stack without deviation:
+
+### Core Technologies
+- **Frontend Framework**: Next.js 14+ (Pages Router)
+- **Styling**: 
+  - TailwindCSS for utility-first styling
+  - We have our components in the components directory. there you can find the components to use. if you dont find a component you need, feel free to create a new one. 
+  - react-icons for iconography
+  - framer-motion for animations
+
+### State Management & Forms
+- **Global State**: Zustand
+- **Form Handling**: 
+  - React Hook Form
+  - Zod for validation schemas
+
+### Backend & Database
+- **Database**: SQLite
+- **ORM**: Prisma
+- **Authentication**: Auth.js (formerly NextAuth.js)
+
+## Clean Code & Component Guidelines
+
+### Code Organization Principles
+1. **Component Reusability**:
+   - ALWAYS check `/components` directory before creating new components
+   - Break down complex components into smaller, reusable pieces
+   - Create shared components for repeated patterns
+
+2. **Code Splitting**:
+   - Split logic into custom hooks when managing complex state or effects
+   - Separate business logic from UI components
+   - Create utility functions for repeated operations
+
+3. **File Organization**:
+   ```
+   src/
+   ├── pages/               # Next.js pages
+   │   ├── api/            # API routes
+   │   └── _app.tsx        # App entry
+   ├── components/         
+   │   ├── ui/            # shadcn/ui components
+   │   ├── forms/         # Form-specific components
+   │   ├── layout/        # Layout components
+   │   └── shared/        # Shared components
+   ├── hooks/             # Custom React hooks
+   ├── utils/             # Utility functions
+   ├── services/          # API services
+   ├── store/             # Zustand store
+   ├── types/             # TypeScript types
+   └── styles/            # Global styles
+   ```
+
+### Component Structure Rules
+1. **Component Creation Guidelines**:
+   - One component per file
+   - PascalCase for component files
+   - Place related components in feature-specific folders
+   - Include prop types interface in the same file
+
+2. **Component Template**:
+   ```tsx
+   import { useState, useEffect } from 'react'
+   import { Icons } from "@/components/icons"
+   import { Button } from "@/components/ui/button"
+
+   interface ComponentNameProps {
+     // Props interface
+   }
+
+   export function ComponentName({ prop1, prop2 }: ComponentNameProps) {
+     // Hooks at the top
+     const [state, setState] = useState()
+
+     // Effects after hooks
+     useEffect(() => {
+       // Effect logic
+     }, [])
+
+     // Helper functions
+     const handleSomething = () => {
+       // Logic
+     }
+
+     // Return JSX
+     return (
+       // JSX
+     )
+   }
+   ```
+
+3. **Code Quality Standards**:
+   - Use meaningful variable and function names
+   - Write self-documenting code
+   - Add comments only for complex logic
+   - Keep functions small and focused
+   - Follow DRY (Don't Repeat Yourself) principle
+   - Implement proper error handling
+   - Use early returns to avoid nested conditions
+
+### Style Guidelines
+1. **CSS Organization**:
+   - Use Tailwind utility classes
+   - Create component-specific styles when needed
+   - Maintain consistent spacing and layout patterns
+   - Follow shadcn/ui theming conventions
+
+2. **Responsive Design**:
+   - Use Tailwind breakpoint utilities
+   - Design mobile-first
+   - Test across different screen sizes
+
+### State Management Best Practices
+1. **Zustand Store Organization**:
+   - Create separate stores for different features
+   - Keep store logic simple and focused
+   - Document store interfaces
+
+2. **Form State Management**:
+   - Use React Hook Form for all forms
+   - Implement Zod schemas for validation
+   - Separate form logic into custom hooks
+
+### Performance Optimization
+1. **Code Optimization**:
+   - Use proper code splitting
+   - Implement dynamic imports
+   - Optimize images and assets
+   - Use proper loading states
+
+2. **Component Optimization**:
+   - Memoize expensive calculations
+   - Use React.memo for pure components
+   - Implement proper error boundaries
+   - Use proper key props in lists
+
+### Development Workflow
+1. **Before Creating New Code**:
+   - Check existing components
+   - Review similar implementations
+   - Consider reusability
+   - Plan component structure
+
+2. **Code Quality Checks**:
+   - Use TypeScript strictly - no `any` types
+   - Follow ESLint rules
+   - Format with Prettier
+   - Review for clean code principles
+
+LLMs must ensure all code contributions follow these guidelines exactly. Any deviation requires explicit approval.

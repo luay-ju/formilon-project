@@ -1,0 +1,97 @@
+// This is your Prisma schema file
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  name          String?
+  password      String    // Hashed password
+  forms         Form[]    // User's created forms
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+}
+
+model Form {
+  id              String    @id @default(cuid())
+  title           String
+  description     String?
+  published       Boolean   @default(false)
+  customSlug      String?   @unique  // Custom URL for the form
+  welcomeScreen   Json?     // Store welcome screen config (title, description, button text)
+  thankyouScreen  Json?     // Store thank you screen config
+  theme           Json?     // Store theme settings (colors, fonts, etc.)
+  settings        Json?     // Store form settings (navigation, progress bar, etc.)
+  translations    Json?     // Store form translations for different languages
+  
+  questions       Question[]
+  submissions     Submission[]
+  
+  userId          String
+  user            User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  @@index([userId])
+}
+
+model Question {
+  id            String    @id @default(cuid())
+  order         Int       // Question order in the form
+  type          String    // Type of question (text, multichoice, email, etc.)
+  title         String    // Question text
+  description   String?   // Optional description/help text
+  required      Boolean   @default(false)
+  properties    Json      // Store question-specific properties 
+  logic         Json?     // Store jump logic and conditions
+  
+  formId        String
+  form          Form      @relation(fields: [formId], references: [id], onDelete: Cascade)
+  answers       Answer[]
+  
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  @@index([formId])
+  @@index([order])
+}
+
+model Submission {
+  id            String    @id @default(cuid())
+  answers       Answer[]
+  completed     Boolean   @default(false)
+  metadata      Json?     // Store submission metadata (browser, device, etc.)
+  
+  formId        String
+  form          Form      @relation(fields: [formId], references: [id], onDelete: Cascade)
+  
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  @@index([formId])
+  @@index([completed])
+}
+
+model Answer {
+  id            String    @id @default(cuid())
+  value         String    // The answer value
+  
+  questionId    String
+  question      Question  @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  
+  submissionId  String
+  submission    Submission @relation(fields: [submissionId], references: [id], onDelete: Cascade)
+  
+  createdAt     DateTime  @default(now())
+
+  @@index([questionId])
+  @@index([submissionId])
+}
